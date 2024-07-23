@@ -13,8 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final String[] passPage = {"/**"};
-    private final String[] authenticatedPage = {"/post/**"};
+    private final String[] passPage = {"/"};
+    private final String[] authenticatedPage = {"/member/**"};
 
     @Autowired
     private SecurityUserDetailsService userDetailsService;
@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                                 .requestMatchers(passPage).permitAll()
-//                        .requestMatchers(authenticatedPage).authenticated()  //authenticated() -> 인증된 사용자만
-//                         .requestMatchers("/admin/**").hasRole("ADMIN")  //DB에 ROLE_ADMIN으로 저장됨
+//                                .requestMatchers(authenticatedPage).authenticated()  //authenticated() -> 인증된 사용자만
+//                                .requestMatchers("/admin/**").hasRole("ADMIN")  //DB에 ROLE_ADMIN으로 저장됨
                 )
 
                 .formLogin(formLogin -> formLogin

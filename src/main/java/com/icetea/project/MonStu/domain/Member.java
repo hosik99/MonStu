@@ -45,6 +45,7 @@ public class Member {
 
     public void setMemberInfo(MemberInfo memberInfo) {
         this.memberInfo = memberInfo;
+        memberInfo.setMember(this);
     }
 
     /*

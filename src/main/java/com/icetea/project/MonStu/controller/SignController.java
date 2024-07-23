@@ -26,12 +26,9 @@ public class SignController {
     public ResponseEntity<String> signUp(@RequestBody SignUpDTO signUpDTO){
         MemberDTO memberDTO = signUpDTO.getMemberDTO();
         MemberInfoDTO memberInfoDTO = signUpDTO.getMemberInfoDTO();
-        log.info("memberDTO : {}",memberDTO.toString());
-        log.info("memberInfoDTO : {}",memberInfoDTO.toString());
-        Boolean isSaved = signSvc.saveUser(memberDTO, memberInfoDTO);
-
+        Boolean isSaved = signSvc.saveMember(memberDTO, memberInfoDTO);
         return isSaved ?
-                new ResponseEntity<>(ResponseMsg.SIGNUP_FAILURE.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR) :
-                new ResponseEntity<>(ResponseMsg.SIGNUP_SUCCESS.getMessage(),HttpStatus.OK);
+                new ResponseEntity<>(ResponseMsg.SIGNUP_SUCCESS.getMessage(), HttpStatus.OK) :
+                new ResponseEntity<>(ResponseMsg.SIGNUP_FAILURE.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

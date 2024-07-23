@@ -2,6 +2,7 @@ package com.icetea.project.MonStu.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,9 +13,9 @@ import java.time.LocalDateTime;
 public class MemberInfoDTO {
     private Long memberId;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDate createdAt = LocalDate.now();
 
-    private int birth;
+    private LocalDate birth;
 
     private String country;
 

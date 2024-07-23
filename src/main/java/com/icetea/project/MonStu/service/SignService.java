@@ -26,19 +26,16 @@ public class SignService {
     }
 
     //유저 하나 저장
-    public Boolean saveUser(MemberDTO memberDTO, MemberInfoDTO memberInfoDTO) {
+    public Boolean saveMember(MemberDTO memberDTO, MemberInfoDTO memberInfoDTO) {
         Member member = modelMapper.map(memberDTO, Member.class);
         MemberInfo memberInfo = modelMapper.map(memberInfoDTO, MemberInfo.class);
 
         String originalPassword = member.getMemberPw();
         member.setMemberPw(pwEncoder.encode(originalPassword));
-
         member.setMemberInfo(memberInfo);
-        memberInfo.setUser(member);
-
-        Member savedUser = memberRps.save(member);
-
-        return savedUser.getMemberId() != null;
+        memberInfo.setMember(member);
+        Member savedMember = memberRps.save(member);
+        return savedMember.getMemberId() != null;
     }
 
 }

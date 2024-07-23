@@ -1,13 +1,16 @@
 package com.icetea.project.MonStu.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString(exclude = "member")
 @Table(name="member_info")
 public class MemberInfo {
@@ -17,10 +20,10 @@ public class MemberInfo {
     private Long memberId;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @Column(name = "birth")
-    private int birth;
+    private LocalDate birth;
 
     @Column(name = "country")
     private String country;
@@ -33,5 +36,5 @@ public class MemberInfo {
     @JoinColumn(name = "member_id")   //@JoinColumn 어노테이션은 외래 키 컬럼을 정의합니다.
     private Member member;
 
-    public void setUser(Member member) {this.member = member;}
+    public void setMember(Member member) {this.member = member;}
 }
