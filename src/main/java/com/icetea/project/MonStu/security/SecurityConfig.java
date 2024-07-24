@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final String[] passPage = {"/"};
+    private final String[] passPage = {"/**"};
     private final String[] authenticatedPage = {"/member/**"};
 
     @Autowired

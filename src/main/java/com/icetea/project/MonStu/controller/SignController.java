@@ -26,6 +26,7 @@ public class SignController {
     public ResponseEntity<String> signUp(@RequestBody SignUpDTO signUpDTO){
         MemberDTO memberDTO = signUpDTO.getMemberDTO();
         MemberInfoDTO memberInfoDTO = signUpDTO.getMemberInfoDTO();
+        log.info("memberDTO: "+memberDTO.toString());
         Boolean isSaved = signSvc.saveMember(memberDTO, memberInfoDTO);
         return isSaved ?
                 new ResponseEntity<>(ResponseMsg.SIGNUP_SUCCESS.getMessage(), HttpStatus.OK) :
