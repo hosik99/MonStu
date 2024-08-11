@@ -26,8 +26,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation ("com.querydsl:querydsl-jpa:5.0.0:jakarta")//
+	implementation("org.springframework.boot:spring-boot-starter-mail:3.3.0")
+
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
 
 	annotationProcessor("org.projectlombok:lombok")
 	annotationProcessor ("com.querydsl:querydsl-apt:5.0.0:jakarta")//
