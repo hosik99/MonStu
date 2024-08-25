@@ -1,11 +1,7 @@
 package com.icetea.project.MonStu.dto;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,7 +19,16 @@ public class ContentDTO {
 
     private String content;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
-    private String memberId;
+    private String email;
+
+    @QueryProjection
+    public ContentDTO(Long contentId, String title, String content, LocalDateTime createdAt, String email) {
+        this.contentId = contentId;
+        this.title = title;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.email = email;
+    }
 }

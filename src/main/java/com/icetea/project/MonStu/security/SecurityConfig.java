@@ -3,18 +3,22 @@ package com.icetea.project.MonStu.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final String[] passPage = {"/**"};
-    private final String[] authenticatedPage = {"/member/**"};
+    private final String[] authenticatedPage = {"/member/**","/api/translation"};
 
     @Autowired
     private SecurityUserDetailsService userDetailsService;
@@ -33,7 +37,13 @@ public class SecurityConfig {
                                 .requestMatchers(passPage).permitAll()
 //                                .requestMatchers(authenticatedPage).authenticated()  //authenticated() -> 인증된 사용자만
 //                                .requestMatchers("/admin/**").hasRole("ADMIN")  //DB에 ROLE_ADMIN으로 저장됨
+//                                .anyRequest().authenticated()  // 나머지 모든 요청은 인증 필요
                 )
+                //JWT
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT는 상태 비저장 세션
+                )
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 
                 .formLogin(formLogin -> formLogin
 //                        .loginPage("/login")  //미설정 시 기본 Login페이지로 이동
@@ -59,8 +69,22 @@ public class SecurityConfig {
     }
 
     @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtTokenProvider());
+    }
+
+    @Bean
+    public JwtTokenProvider jwtTokenProvider() {
+        return new JwtTokenProvider();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();  //DelegatingPasswordEncoder 반환,각 암호화 방식은 id를 가지고 있으며, 암호화된 비밀번호는 {id}로 시작하여 어떤 방식이 사용되었는지 명시합니다
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 }

@@ -3,13 +3,10 @@ package com.icetea.project.MonStu;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class AppConfig {
-//    @Bean
-//    public ModelMapper modelMapper(){
-//        return new ModelMapper();
-//    }
 
     @Bean
     public ModelMapper modelMapper() {
@@ -19,5 +16,8 @@ public class AppConfig {
 //                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);    //private 필드에도 접근
         return modelMapper;
     }
-
+    @Bean   //HTTP
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
 }

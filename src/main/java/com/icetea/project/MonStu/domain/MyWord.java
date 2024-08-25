@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @Entity
 @ToString(exclude = "content")
 @Table(name="my_word")
@@ -16,11 +17,11 @@ public class MyWord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long myWordId;
 
-    @Column(name="word")
-    private String word;
+    @Column(name="target_word")
+    private String targetWord;
 
-    @Column(name="type")
-    private String type;
+    @Column(name="translated_word")
+    private String translatedWord;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "content_id")

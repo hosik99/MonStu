@@ -27,11 +27,11 @@ INSERT INTO content (title, content, created_at, member_id) VALUES ('Title 4', '
 INSERT INTO content (title, content, created_at, member_id) VALUES ('Title 5', 'Content 5', '2024-08-10 14:00:00', 5);
 
 -- MY_WORD 테이블에 데이터 삽입
-INSERT INTO my_word (word, type, content_id) VALUES ('Word1', 'Type1', 2);
-INSERT INTO my_word (word, type, content_id) VALUES ('Word2', 'Type2', 2);
-INSERT INTO my_word (word, type, content_id) VALUES ('Word3', 'Type3', 2);
-INSERT INTO my_word (word, type, content_id) VALUES ('Word4', 'Type4', 4);
-INSERT INTO my_word (word, type, content_id) VALUES ('Word5', 'Type5', 5);
+INSERT INTO my_word (target_word, translated_word, content_id) VALUES ('Word1', '단어1', 2);
+INSERT INTO my_word (target_word, translated_word, content_id) VALUES ('Word2', '단어2', 2);
+INSERT INTO my_word (target_word, translated_word, content_id) VALUES ('Word3', '단어3', 2);
+INSERT INTO my_word (target_word, translated_word, content_id) VALUES ('Word4', '단어4', 4);
+INSERT INTO my_word (target_word, translated_word, content_id) VALUES ('Word5', '단어5', 5);
 
 -- MY_SENTENCE 테이블에 데이터 삽입
 INSERT INTO my_sentence (sentence, type, content_id) VALUES ('Sentence1', 'Type1', 2);
