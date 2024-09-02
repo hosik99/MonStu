@@ -30,8 +30,8 @@ public class ContentController {
         log.info("ContentDTO : {}",contentDTO.toString());
         Boolean isSaved = conSvc.saveContent(contentDTO);
         return isSaved ?
-                new ResponseEntity<>(ResponseMsg.SAVE_FAILURE.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR) :
-                new ResponseEntity<>(ResponseMsg.SAVE_SUCCESS.getMessage(),HttpStatus.OK);
+                new ResponseEntity<>(ResponseMsg.SAVE_SUCCESS.getMessage(),HttpStatus.OK):
+                new ResponseEntity<>(ResponseMsg.SAVE_FAILURE.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     //GET ALL CONTENTDTOs

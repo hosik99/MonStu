@@ -61,15 +61,6 @@ public class Member {
     FetchType.EAGER: 부모 엔티티를 조회할 때 연관된 엔티티를 즉시 데이터베이스에서 함께 가져옵니다. 즉시 로딩 방식입니다.
                      성능 이슈를 발생시킬 수 있으므로 필요한 경우에만 사용해야 합니다.
     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "qid")
-    private PwQuiz pwQuiz;
-
-    public void setPwQuiz(PwQuiz pwQuiz) {
-        this.pwQuiz = pwQuiz;
-        if(!pwQuiz.getMembers().contains(this)) pwQuiz.getMembers().add(this);
-    }
-
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Content> contents = new ArrayList<>();
 

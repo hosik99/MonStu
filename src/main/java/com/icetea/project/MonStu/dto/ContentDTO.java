@@ -21,6 +21,8 @@ public class ContentDTO {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
     private String email;
 
     @QueryProjection

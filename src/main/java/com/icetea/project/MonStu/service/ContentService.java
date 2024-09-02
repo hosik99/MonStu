@@ -47,14 +47,16 @@ public class ContentService {
     public Boolean saveContent(ContentDTO contentDTO){
         Member member = getSecurityUserEntity();
 
-        Content content = modelMapper.map(contentDTO, Content.class);
+        Content contentEntity = modelMapper.map(contentDTO, Content.class);
+        System.out.println("contentEntity: "+contentEntity.toString());
+        contentEntity.setMember(member);  // 관계 설정
+        Content savedContent = contentRps.save(contentEntity); // Content 저장
+        System.out.println("savedContent: "+savedContent.toString());
+        member.addContent(savedContent);
 
-        member.addContent(content);
-        content.setMember(member);
         memberRps.save(member);  //(CascadeType.ALL로 인해
-//        log.info("{} is Saved : {}",content.getTitle(),content.getContentId() != null);
-//        return content.getContentId() != null;
-        return true;
+        log.info("{} is Saved : {}",savedContent.getTitle(),savedContent.getContentId() != null);
+        return savedContent.getContentId() != null;
     }
 
     //GET ALL TITLES BY USER's EMAIL
@@ -103,7 +105,8 @@ public class ContentService {
                 .select(new QMyWordDTO(
                         myWord.myWordId,
                         myWord.targetWord,
-                        myWord.translatedWord
+                        myWord.translatedWord,
+                        myWord.content.contentId
                 ))
                 .from(myWord)
                 .where(myWord.content.contentId.eq(contentId))

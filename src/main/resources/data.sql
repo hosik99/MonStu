@@ -1,16 +1,9 @@
--- PW_QUIZ 테이블에 데이터 삽입
-INSERT INTO pw_quiz (quiz) VALUES ('Sample Quiz 1');
-INSERT INTO pw_quiz (quiz) VALUES ('Sample Quiz 2');
-INSERT INTO pw_quiz (quiz) VALUES ('Sample Quiz 3');
-INSERT INTO pw_quiz (quiz) VALUES ('Sample Quiz 4');
-INSERT INTO pw_quiz (quiz) VALUES ('Sample Quiz 5');
-
 -- MEMBER 테이블에 데이터 삽입 Password is 'password'
-INSERT INTO member (email, member_pw, role, qid) VALUES ('ADMIN@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_ADMIN', 1);
-INSERT INTO member (email, member_pw, role, qid) VALUES ('user2@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_MEMBER', 2);
-INSERT INTO member (email, member_pw, role, qid) VALUES ('user3@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_MEMBER', 3);
-INSERT INTO member (email, member_pw, role, qid) VALUES ('user4@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_MEMBER', 4);
-INSERT INTO member (email, member_pw, role, qid) VALUES ('user5@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_MEMBER', 5);
+INSERT INTO member (email, member_pw, role) VALUES ('ADMIN@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_ADMIN');
+INSERT INTO member (email, member_pw, role) VALUES ('user2@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_MEMBER');
+INSERT INTO member (email, member_pw, role) VALUES ('user3@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_MEMBER');
+INSERT INTO member (email, member_pw, role) VALUES ('user4@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_MEMBER');
+INSERT INTO member (email, member_pw, role) VALUES ('user5@example.com', '{bcrypt}$2a$10$FcpH2G1uCVS87U3F0J/wSu/qKMHLJGe/bHlwPIv55F.8QqWyKMJS.', 'ROLE_MEMBER');
 
 -- MEMBER_INFO 테이블에 데이터 삽입
 INSERT INTO member_info (member_id, created_at, birth, country, nickname) VALUES (1, '2024-08-10', '1990-01-01', 'Country1', 'Nickname1');

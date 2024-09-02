@@ -21,10 +21,11 @@ public class MyWordDTO {
     private Long contentId;
 
     @QueryProjection
-    public MyWordDTO(Long myWordId, String targetWord, String translatedWord) {
+    public MyWordDTO(Long myWordId, String targetWord, String translatedWord,Long contentId) {
         this.myWordId = myWordId;
         this.targetWord = targetWord;
         this.translatedWord = translatedWord;
+        this.contentId = contentId;
     }
 
 }
