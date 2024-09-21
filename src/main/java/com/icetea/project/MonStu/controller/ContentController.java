@@ -4,6 +4,7 @@ import com.icetea.project.MonStu.dto.ContentDTO;
 import com.icetea.project.MonStu.dto.MyWordDTO;
 import com.icetea.project.MonStu.enums.ResponseMsg;
 import com.icetea.project.MonStu.service.ContentService;
+import com.icetea.project.MonStu.service.WordService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,13 @@ import java.util.Map;
 @RequestMapping("/member/content")
 public class ContentController {
 
-    private ContentService conSvc;
+    private final ContentService conSvc;
+    private final WordService wordSvc;
 
-    public ContentController(ContentService conSvc) { this.conSvc = conSvc; }
+    public ContentController(ContentService conSvc,WordService wordSvc) {
+        this.conSvc = conSvc;
+        this.wordSvc = wordSvc;
+    }
 
     @PostMapping("/add")
     public ResponseEntity<String> saveContent(@RequestBody ContentDTO contentDTO){
@@ -55,7 +60,7 @@ public class ContentController {
         ContentDTO contentDTO = conSvc.getContentById(contentId);
         log.info("contentDTO : {}",contentDTO.toString());
 
-        List<MyWordDTO> myWordDTOList = conSvc.getWordByContentId(contentId);
+        List<MyWordDTO> myWordDTOList = wordSvc.getWordByContentId(contentId);
 
         Map<String, Object> response = new HashMap<>();
         if (contentDTO.getContentId()!=null) {

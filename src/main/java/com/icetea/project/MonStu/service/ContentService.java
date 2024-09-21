@@ -8,7 +8,6 @@ import com.icetea.project.MonStu.dto.QContentDTO;
 import com.icetea.project.MonStu.dto.QMyWordDTO;
 import com.icetea.project.MonStu.repository.ContentRepository;
 import com.icetea.project.MonStu.repository.MemberRepository;
-import com.icetea.project.MonStu.repository.MyWordRepository;
 import com.icetea.project.MonStu.util.AuthManager;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.icetea.project.MonStu.domain.QContent.content1;
 import static com.icetea.project.MonStu.domain.QMember.member;
@@ -78,11 +76,6 @@ public class ContentService {
 
     }
 
-    /* GET USER ENTITY */
-    public Member getSecurityUserEntity(){
-        return memberRps.findByEmail(authManager.getUserName()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
-    }
-
     public ContentDTO getContentById(Long contentId) {
         Member securityMember = getSecurityUserEntity();
         return queryFactory
@@ -100,16 +93,8 @@ public class ContentService {
                 .fetchOne();
     }
 
-    public List<MyWordDTO> getWordByContentId(Long contentId){
-        return queryFactory
-                .select(new QMyWordDTO(
-                        myWord.myWordId,
-                        myWord.targetWord,
-                        myWord.translatedWord,
-                        myWord.content.contentId
-                ))
-                .from(myWord)
-                .where(myWord.content.contentId.eq(contentId))
-                .fetch();
+    /* GET USER ENTITY */
+    public Member getSecurityUserEntity(){
+        return memberRps.findByEmail(authManager.getUserName()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 }

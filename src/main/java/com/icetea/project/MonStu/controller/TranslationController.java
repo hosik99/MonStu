@@ -1,13 +1,17 @@
 package com.icetea.project.MonStu.controller;
 
+import com.icetea.project.MonStu.dto.MyWordDTO;
 import com.icetea.project.MonStu.dto.TranslationDTO;
 import com.icetea.project.MonStu.service.TranslationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/tr")
 public class TranslationController {
 
     private final TranslationService translationService;
@@ -17,10 +21,18 @@ public class TranslationController {
     }
 
     //Translation (used NAVER-PAPAGO AI)
-    @PostMapping("/translation")
+    @PostMapping("/api/translation")
     public String Translation(@RequestBody TranslationDTO translationDTO){
         log.info(translationDTO.toString());
         return translationService.translateText(translationDTO);
+    }
+
+    //Create New Content (used CLOVA STUDIO AI)
+    @PostMapping("/api/con")
+    public String getContentApi(@RequestBody Map<Long,List<Long>> wordIdList){
+        log.info(wordIdList.toString());
+        String response = translationService.getContentByWords(wordIdList);
+        return response;
     }
 
 }

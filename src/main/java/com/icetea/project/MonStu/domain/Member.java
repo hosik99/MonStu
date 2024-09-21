@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"pwQuiz","content"})
+@ToString(exclude = {"content","aiContents"})
 @Table(name="member")
 public class Member {
 
@@ -72,5 +72,19 @@ public class Member {
     public void removeContent(Content content){
         contents.remove(content);
         if(content.getMember()==this) content.setMember(null);
+    }
+
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<AiContent> aiContents = new ArrayList<>();
+
+    public void addAiContent(AiContent aiContent){
+        this.aiContents.add(aiContent);
+        if(aiContent.getMember()!=this) aiContent.setMember(this);
+    }
+
+    public void removeAiContent(AiContent aiContent){
+        System.out.println("aiContent: "+aiContent.toString());
+        aiContents.remove(aiContent);
+        if (aiContent.getMember() != null && aiContent.getMember() == this) { aiContent.setMember(null); }
     }
 }

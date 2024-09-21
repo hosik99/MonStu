@@ -5,6 +5,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+/*
+    @AuthenticationPrincipal로 대체 가능
+*/
 @Component
 public class AuthManager {
     public AuthManager() {}
@@ -25,4 +28,5 @@ public class AuthManager {
         }
         return username;
     }
+
 }

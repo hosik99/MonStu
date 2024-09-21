@@ -46,7 +46,7 @@ public class Content {
         if(!member.getContents().contains(this)) member.getContents().add(this);
     }
 
-    @OneToMany(mappedBy = "content",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "content",cascade = CascadeType.ALL,orphanRemoval = true) //orphanRemoval->연결이 끊어지면 고아되는 객체 삭제
     private List<MyWord> myWords = new ArrayList<>();
 
     public void addMyWords(MyWord myword){
