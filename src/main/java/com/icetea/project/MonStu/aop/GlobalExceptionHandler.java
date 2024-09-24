@@ -1,5 +1,6 @@
 package com.icetea.project.MonStu.aop;
 
+import com.icetea.project.MonStu.enums.ResponseMsg;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +12,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ResponseMsg.USER_NOT_FOUNDED.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

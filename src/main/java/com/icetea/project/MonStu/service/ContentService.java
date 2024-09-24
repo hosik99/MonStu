@@ -45,15 +45,10 @@ public class ContentService {
     public Boolean saveContent(ContentDTO contentDTO){
         Member member = getSecurityUserEntity();
 
-        Content contentEntity = modelMapper.map(contentDTO, Content.class);
-        System.out.println("contentEntity: "+contentEntity.toString());
-        contentEntity.setMember(member);  // 관계 설정
-        Content savedContent = contentRps.save(contentEntity); // Content 저장
-        System.out.println("savedContent: "+savedContent.toString());
-        member.addContent(savedContent);
+        Content content = modelMapper.map(contentDTO, Content.class);
+        content.setMember(member);
 
-        memberRps.save(member);  //(CascadeType.ALL로 인해
-        log.info("{} is Saved : {}",savedContent.getTitle(),savedContent.getContentId() != null);
+        Content savedContent = contentRps.save(content);
         return savedContent.getContentId() != null;
     }
 
@@ -97,4 +92,5 @@ public class ContentService {
     public Member getSecurityUserEntity(){
         return memberRps.findByEmail(authManager.getUserName()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
+
 }

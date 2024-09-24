@@ -31,12 +31,17 @@ public class ContentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> saveContent(@RequestBody ContentDTO contentDTO){
-        log.info("ContentDTO : {}",contentDTO.toString());
-        Boolean isSaved = conSvc.saveContent(contentDTO);
-        return isSaved ?
-                new ResponseEntity<>(ResponseMsg.SAVE_SUCCESS.getMessage(),HttpStatus.OK):
-                new ResponseEntity<>(ResponseMsg.SAVE_FAILURE.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Map<String, Object>> saveContent(@RequestBody ContentDTO contentDTO){
+        Map<String, Object> response = new HashMap<>();
+        log.info("ContentController-saveContent : New Content Save Request");
+        try {
+            conSvc.saveContent(contentDTO);
+            response.put("stateMessage",ResponseMsg.SAVE_SUCCESS.getMessage());
+            return new ResponseEntity<>(response,HttpStatus.CREATED);  //201
+        }catch (Exception e){
+            response.put("stateMessage",ResponseMsg.SAVE_FAILURE.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);   //500
+        }
     }
 
     //GET ALL CONTENTDTOs
