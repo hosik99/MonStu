@@ -12,6 +12,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException ex) {
-        return new ResponseEntity<>(ResponseMsg.USER_NOT_FOUNDED.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ResponseMsg.USER_NOT_FOUNDED_EX.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return new ResponseEntity<>(ResponseMsg.ILLEGAL_ARGUMENT_EX.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        return new ResponseEntity<>(ResponseMsg.RUNTIME_EX.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

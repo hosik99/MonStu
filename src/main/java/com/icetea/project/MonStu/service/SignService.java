@@ -46,7 +46,7 @@ public class SignService {
     }
 
     //CHECK EMAIL REDUNDANCY
-    public boolean checkEmail(String email) {
+    public boolean existsByEmail(String email) {
         return memberRps.existsByEmail(email);
     }
 

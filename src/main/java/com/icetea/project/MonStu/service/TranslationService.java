@@ -34,10 +34,7 @@ import java.util.Map;
 public class TranslationService {
 
     private final WebClient webClient;  //Spring WebFlux에서 비동기식, 반응형 HTTP 요청을 수행하기 위한 인터페이스
-    private final NaverAPIManager naverAPIManager;
-    private final WordRepository wordRepository;
     private final MemberRepository memberRepository;
-    private final AiContentRepository aiContentRepository;
     private final AuthManager authManager;
 
     // API 키와 URL을 외부 설정 파일에서 주입받습니다.
@@ -46,23 +43,11 @@ public class TranslationService {
     @Value("${naver.api.client.secret}")
     private String clientSecret;
 
-    @Value("${naver.api.studio.key}")
-    private String studioKey;
-    @Value("${naver.api.studio.gw.key}")
-    private String studioGwKey;
-    @Value("${naver.api.studio.request.id}")
-    private String studioRequestId;
-
     private static final String PAPAGO_URL = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation";
 
-    private static final String CLOVA_STUDIO_URL = "https://clovastudio.stream.ntruss.com/testapp/v1/chat-completions/HCX-DASH-001";
-
     //Spring WebFlux와 함께 사용되는 Reactor Netty 기반의 비동기 HTTP 클라이언트를 설정
-    public TranslationService(WordRepository wordRepository,NaverAPIManager naverAPIManager,AiContentRepository aiContentRepository,AuthManager authManager,MemberRepository memberRepository) {
-        this.wordRepository = wordRepository;
+    public TranslationService(AuthManager authManager,MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.naverAPIManager = naverAPIManager;
-        this.aiContentRepository = aiContentRepository;
         this.authManager = authManager;
 
         //TCP 연결에 대한 시간 제한(타임아웃)을 설정
@@ -114,68 +99,6 @@ public class TranslationService {
             log.info("PAPAGO API 호출 중 에러 발생: {}", errorBody);
             throw new RuntimeException("PAPAGO API 호출 중 에러 발생: " + errorBody);
         }
-    }
-
-    //PAPAGO TRANSLATION API
-    public String getContentByWords(Map<Long,List<Long>> wordIdList) {
-        List wordList = getWordList(wordIdList);
-
-        if(wordList.isEmpty()) {
-            log.info("Word List is empty");
-            return null;
-        }
-        Map<String, Object> requestMsg = naverAPIManager.requestToClova(wordList);
-
-        ClientResponse response = this.webClient.post()
-                .uri(CLOVA_STUDIO_URL)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .header("X-NCP-CLOVASTUDIO-API-KEY", studioKey)
-                .header("X-NCP-APIGW-API-KEY", studioGwKey)
-                .header("X-NCP-CLOVASTUDIO-REQUEST-ID", studioRequestId)
-//                .header("Accept", "text/event-stream")
-                .bodyValue(requestMsg)
-                .exchange() // exchange()를 사용하여 응답을 수동으로 처리
-                .block(); // block()으로 동기 대기
-
-        if (response.statusCode().is2xxSuccessful()) {
-            String responseBody = response.bodyToMono(String.class).block();
-            log.info("New Content Successfully generated - {}", responseBody.toString());
-            saveAiContent(responseBody);    //aiContent DB에 저장
-            return responseBody;
-        } else {
-            String errorBody = response.bodyToMono(String.class).block();
-            log.info("CLOVA_STUDIO API 호출 중 에러 발생: {}", errorBody);
-            throw new RuntimeException("CLOVA_STUDIO API 호출 중 에러 발생: " + errorBody);
-        }
-    }
-
-    private List<String> getWordList(Map<Long,List<Long>> wordIdList){
-        List<String> wordList = new ArrayList<>();
-        List idList = new ArrayList<Long>();
-        for(Long wordId : wordIdList.keySet()){
-            idList = wordIdList.get(wordId);
-            List<MyWord> entitiyList = wordRepository.findAllById(idList);
-            for(MyWord entity : entitiyList){
-                wordList.add(entity.getTargetWord());
-            }
-        }
-        return wordList;
-    }
-
-    private void saveAiContent(String responseBody){
-        AiContent aicon = new AiContent();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonNode jsonNode = objectMapper.readTree(responseBody);
-            aicon.setAiContent( jsonNode.path("result").path("message").path("content").asText() );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Member member = getSecurityUserEntity();
-        aicon.setMember(member);
-        member.addAiContent(aicon);
-        memberRepository.save(member);
     }
 
     /* GET USER ENTITY */

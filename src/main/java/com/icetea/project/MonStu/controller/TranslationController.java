@@ -27,12 +27,4 @@ public class TranslationController {
         return translationService.translateText(translationDTO);
     }
 
-    //Create New Content (used CLOVA STUDIO AI)
-    @PostMapping("/api/con")
-    public String getContentApi(@RequestBody Map<Long,List<Long>> wordIdList){
-        log.info(wordIdList.toString());
-        String response = translationService.getContentByWords(wordIdList);
-        return response;
-    }
-
 }

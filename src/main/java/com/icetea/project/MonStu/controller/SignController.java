@@ -46,29 +46,32 @@ public class SignController {
     */
     //CHECK EMAIL REDUNDANCY
     @PostMapping("/check")
-    public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam("email") String email){
-        boolean emailExists = signSvc.checkEmail(email);
+    public ResponseEntity<Map<String, Object>> checkEmail(@RequestBody Map<String, Object> requestData){
+        String email = (String) requestData.get("email");
         Map<String, Object> response = new HashMap<>();
-        if (emailExists) {
-            response.put("message", "이미 가입되어 있는 이메일입니다.");
+
+        if ( signSvc.existsByEmail(email) ) {
+            response.put("stateMessage", ResponseMsg.SIGNUP_EXISTS_EMAIL.getMessage());
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         } else {
-            response.put("message", "이메일을 사용할 수 있습니다.");
+            response.put("stateMessage", ResponseMsg.SIGNUP_NONEXISTS_EMAIL.getMessage());
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
 
     //SEND EMAIL CHECK CODE
     @PostMapping("/emailcode")
-    public ResponseEntity< Map<String, Object> > emailCode(@RequestParam("email") String email){
-        String isSend = signSvc.sendEmailCode(email);
+    public ResponseEntity< Map<String, Object> > emailCode(@RequestBody Map<String, Object> requestData){
+        String email = (String) requestData.get("email");
+        String checkCode = signSvc.sendEmailCode(email);   //전송 실패 시 null 반환
+
         Map<String, Object> response = new HashMap<>();
-            response.put("isSend", isSend);
-        if (isSend != null) {
-            response.put("message", EmailMsg.SIGNUP_SUCCESS.getMessage());
+        if (checkCode != null) {
+            response.put("checkCode", checkCode);
+            response.put("stateMessage", EmailMsg.SIGNUP_SUCCESS.getMessage());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            response.put("message", EmailMsg.SIGNUP_FAILURE.getMessage());
+            response.put("stateMessage", EmailMsg.SIGNUP_FAILURE.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
