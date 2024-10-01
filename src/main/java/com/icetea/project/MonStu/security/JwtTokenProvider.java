@@ -1,9 +1,6 @@
 package com.icetea.project.MonStu.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -19,7 +16,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    private final long validityInMilliseconds = 3600000; // 1시간
+    private final long validityInMilliseconds = 60 * 60 * 1000; // 1시간
 
     public String createToken(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -62,9 +59,22 @@ public class JwtTokenProvider {
             Jwts.parserBuilder()
                     .setSigningKey(secretKey.getBytes())
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token); //토큰 검증 (만료시간 등)
             return true;
+        } catch (ExpiredJwtException e) {
+            // 토큰이 만료된 경우
+            return false;
+        } catch (UnsupportedJwtException e) {
+            // 지원되지 않는 JWT인 경우
+            return false;
+        } catch (MalformedJwtException e) {
+            // 잘못된 형식의 JWT인 경우
+            return false;
+        } catch (SignatureException e) {
+            // 서명 검증 실패인 경우
+            return false;
         } catch (Exception e) {
+            // 기타 예외
             return false;
         }
     }

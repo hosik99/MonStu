@@ -12,6 +12,7 @@ import com.icetea.project.MonStu.util.AuthManager;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +91,9 @@ public class ContentService {
 
     /* GET USER ENTITY */
     public Member getSecurityUserEntity(){
-        return memberRps.findByEmail(authManager.getUserName()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("JWT-email: "+email);
+        return memberRps.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
 }

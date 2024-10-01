@@ -36,4 +36,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 다음 필터로 체인 전달
         chain.doFilter(request, response);
     }
+
 }
