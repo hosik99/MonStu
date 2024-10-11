@@ -24,7 +24,6 @@ public class WordController {
     //save MyWords
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody List<MyWordDTO> myWordDTOList){
-                    System.out.println("savewords - myWordDTOList : "+myWordDTOList);
         Boolean saved = wordSvc.saveWords(myWordDTOList);
         return saved ?
                 new ResponseEntity<>(HttpStatus.OK) :
