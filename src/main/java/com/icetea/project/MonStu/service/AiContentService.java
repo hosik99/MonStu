@@ -7,6 +7,7 @@ import com.icetea.project.MonStu.domain.Member;
 import com.icetea.project.MonStu.domain.MyWord;
 import com.icetea.project.MonStu.domain.QAiContent;
 import com.icetea.project.MonStu.dto.AiContentDTO;
+import com.icetea.project.MonStu.dto.MyWordDTO;
 import com.icetea.project.MonStu.dto.QAiContentDTO;
 import com.icetea.project.MonStu.dto.QContentDTO;
 import com.icetea.project.MonStu.repository.AiContentRepository;
@@ -36,6 +37,7 @@ import reactor.netty.http.client.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.icetea.project.MonStu.domain.QAiContent.aiContent1;
 import static com.icetea.project.MonStu.domain.QContent.content1;
@@ -96,16 +98,17 @@ public class AiContentService {
                 .from(aiContent1)
                 .join(aiContent1.member,member)
                 .where(aiContent1.member.memberId.eq(memberEntity.getMemberId()))
+                .orderBy(aiContent1.createdAt.desc())
                 .fetch();
     }
 
     @Transactional
     public void delById(Long id) {
         Member memberEntity = getSecurityUserEntity();
-        log.info("member-delById:{}",memberEntity.getAiContents());
+                    log.info("member-delById:{}",memberEntity.getAiContents());
 
         AiContent aiContentEntity = aiContentRepository.findById(id).orElseThrow(()-> new RuntimeException ("User not found"));
-        log.info("aiContent-delById:{}",aiContentEntity);
+                    log.info("aiContent-delById:{}",aiContentEntity);
 
         // AiContent가 Member의 aiContents에 포함되어 있는지 확인
         if (!memberEntity.getAiContents().contains(aiContentEntity)) {
@@ -120,16 +123,21 @@ public class AiContentService {
     /* GET USER ENTITY */
     public Member getSecurityUserEntity(){
         String userName = authManager.getUserName();
-        log.info("userName: "+ userName);
+                    log.info("userName: "+ userName);
         return memberRps.findByEmail(userName).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 
     //CREATE NEW AI CONTENT BY WORDLIST
-    public String getContentByWords(Map<Long,List<Long>> wordIdList) {
-        List wordList = getWordList(wordIdList);
+    public String getContentByWords(Map<Long,List<MyWordDTO>> wordIdList) {
+
+        List<String> wordList = wordIdList.values()
+                .stream()
+                .flatMap(List::stream)//flatMap은 스트림의 각 요소를 변환하고, 그 변환된 요소들을 하나의 평면 스트림으로 결합, 2차원 배열을 1차원 하나로 바꿀떄
+                .map(MyWordDTO :: getTargetWord)
+                .collect(Collectors.toList());
 
         if (wordList.isEmpty()) {
-            log.info("Word List is empty");
+                        log.info("Word List is empty");
             return null;
         }
         Map<String, Object> requestMsg = naverAPIManager.requestToClova(wordList);
@@ -147,27 +155,14 @@ public class AiContentService {
 
         if (response.statusCode().is2xxSuccessful()) {
             String responseBody = response.bodyToMono(String.class).block();
-            log.info("New Content Successfully generated - {}", responseBody.toString());
+                        log.info("New Content Successfully generated - {}", responseBody.toString());
             saveAiContent(responseBody);    //aiContent DB에 저장
             return responseBody;
         } else {
             String errorBody = response.bodyToMono(String.class).block();
-            log.info("CLOVA_STUDIO API 호출 중 에러 발생: {}", errorBody);
+                        log.info("CLOVA_STUDIO API 호출 중 에러 발생: {}", errorBody);
             throw new RuntimeException("CLOVA_STUDIO API 호출 중 에러 발생: " + errorBody);
         }
-    }
-
-    private List<String> getWordList(Map<Long,List<Long>> wordIdList){
-        List<String> wordList = new ArrayList<>();
-        List idList = new ArrayList<Long>();
-        for(Long wordId : wordIdList.keySet()){
-            idList = wordIdList.get(wordId);
-            List<MyWord> entitiyList = wordRepository.findAllById(idList);
-            for(MyWord entity : entitiyList){
-                wordList.add(entity.getTargetWord());
-            }
-        }
-        return wordList;
     }
 
     private void saveAiContent(String responseBody){

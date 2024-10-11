@@ -2,6 +2,7 @@ package com.icetea.project.MonStu.controller;
 
 import com.icetea.project.MonStu.domain.AiContent;
 import com.icetea.project.MonStu.dto.AiContentDTO;
+import com.icetea.project.MonStu.dto.MyWordDTO;
 import com.icetea.project.MonStu.enums.ResponseMsg;
 import com.icetea.project.MonStu.service.AiContentService;
 import lombok.extern.slf4j.Slf4j;
@@ -38,17 +39,15 @@ public class AiContentController {
 
     @PostMapping("/del")
     public ResponseEntity<String> delById(@RequestBody Long id) {
-        System.out.println("delById: "+id);
         aiConSvc.delById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //Create New Content (used CLOVA STUDIO AI)
     @PostMapping("/api/con")
-    public ResponseEntity<Map<String, Object>> getContentApi(@RequestBody Map<Long,List<Long>> wordIdList){
+    public ResponseEntity<Map<String, Object>> getContentApi(@RequestBody Map<Long,List<MyWordDTO>> wordIdList){
         Map<String, Object> response = new HashMap<>();
-        log.info(wordIdList.toString());
-
+                    log.info(wordIdList.toString());
         response.put("apiResponse",aiConSvc.getContentByWords(wordIdList));
         response.put("stateMessage", ResponseMsg.CREATED_SUCCESS.getMessage());
         return new ResponseEntity<>(response,HttpStatus.CREATED);

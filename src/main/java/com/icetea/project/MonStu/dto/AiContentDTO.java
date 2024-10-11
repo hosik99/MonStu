@@ -1,6 +1,5 @@
 package com.icetea.project.MonStu.dto;
 
-import com.icetea.project.MonStu.domain.Member;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;

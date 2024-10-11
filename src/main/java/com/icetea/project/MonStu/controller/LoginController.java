@@ -40,7 +40,7 @@ public class LoginController {
             );
 
             String token = jwtTokenProvider.createToken(authentication);
-            log.info("{} : Token Created", email);
+                        log.info("{} : Token Created", email);
 
             // JWT를 HttpOnly 쿠키로 설정
             ResponseCookie cookie = ResponseCookie.from("auth-token", token)
@@ -56,7 +56,7 @@ public class LoginController {
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())
                     .body("로그인 성공");
         } catch (AuthenticationException e) {
-            log.info("{} : Login denied - {}", email,e);
+                        log.info("{} : Login denied - {}", email,e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("일치하는 정보가 없습니다.");
         }
     }

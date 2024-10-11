@@ -33,7 +33,7 @@ public class ContentController {
     @PostMapping("/add")
     public ResponseEntity<Map<String, Object>> saveContent(@RequestBody ContentDTO contentDTO){
         Map<String, Object> response = new HashMap<>();
-        log.info("ContentController-saveContent : New Content Save Request");
+                    log.info("ContentController-saveContent : New Content Save Request");
         try {
             conSvc.saveContent(contentDTO);
             response.put("stateMessage",ResponseMsg.SAVE_SUCCESS.getMessage());
@@ -60,11 +60,9 @@ public class ContentController {
     //Get ONE CONTENT,WORDS, SENTENES BY ID
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getContentById(@PathVariable("id") Long contentId) throws InterruptedException {
-        log.info("ContentId : {}",contentId);
-
+                    log.info("ContentId : {}",contentId);
         ContentDTO contentDTO = conSvc.getContentById(contentId);
-        log.info("contentDTO : {}",contentDTO.toString());
-
+                    log.info("contentDTO : {}",contentDTO.toString());
         List<MyWordDTO> myWordDTOList = wordSvc.getWordByContentId(contentId);
 
         Map<String, Object> response = new HashMap<>();

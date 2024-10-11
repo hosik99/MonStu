@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.icetea.project.MonStu.domain.QContent.content1;
 import static com.icetea.project.MonStu.domain.QMyWord.myWord;
@@ -113,16 +114,20 @@ public class WordService {
     }
 
     @Transactional
-    public Boolean delMyWords(Map<Long, List<Long>> delList) {
+    public Boolean delMyWords(Map<Long,List<MyWordDTO>> delList) {
         try {
-            for(Map.Entry<Long, List<Long>> entry : delList.entrySet()){
+            for(Map.Entry<Long,List<MyWordDTO>> entry : delList.entrySet()){
                 Optional<Content> contentOpt = contentRps.findById(entry.getKey());
                 Content contentEntity = contentOpt.orElse(null);
-                List<MyWord> wordEntitiies = wordRps.findAllById(entry.getValue());
+
+                List<Long> wordIdList = entry.getValue().stream()
+                        .map(MyWordDTO :: getMyWordId)
+                        .toList();
+
+                List<MyWord> wordEntitiies = wordRps.findAllById(wordIdList);
                 wordEntitiies.forEach(word ->
                         contentEntity.removeMyWords(word)
                 );
-
                 contentRps.save(contentEntity);
             }
             return true;

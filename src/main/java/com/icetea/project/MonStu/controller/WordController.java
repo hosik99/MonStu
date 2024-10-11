@@ -24,7 +24,7 @@ public class WordController {
     //save MyWords
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody List<MyWordDTO> myWordDTOList){
-        System.out.println("savewords - myWordDTOList : "+myWordDTOList);
+                    System.out.println("savewords - myWordDTOList : "+myWordDTOList);
         Boolean saved = wordSvc.saveWords(myWordDTOList);
         return saved ?
                 new ResponseEntity<>(HttpStatus.OK) :
@@ -42,8 +42,7 @@ public class WordController {
 
     //Delete MyWords by Id
     @PostMapping("/del")
-    public ResponseEntity<String> delMyWords(@RequestBody Map<Long, List<Long>> delList){
-        log.info("delMyWords");
+    public ResponseEntity<String> delMyWords(@RequestBody Map<Long,List<MyWordDTO>> delList){
         wordSvc.delMyWords(delList);
         return new ResponseEntity<>(HttpStatus.OK);
     }

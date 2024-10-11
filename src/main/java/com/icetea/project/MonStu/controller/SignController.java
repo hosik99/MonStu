@@ -22,7 +22,6 @@ import java.util.Map;
 @RequestMapping("/sign")
 public class SignController {
 
-//    private static final Logger log = LoggerFactory.getLogger(SignController.class);
     private final SignService signSvc;
 
     public SignController(SignService signSvc) {
@@ -39,7 +38,6 @@ public class SignController {
                 new ResponseEntity<>(ResponseMsg.SIGNUP_SUCCESS.getMessage(), HttpStatus.OK) :
                 new ResponseEntity<>(ResponseMsg.SIGNUP_FAILURE.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
     /*
         HttpStatus.CONFLICT (409 Conflict) -> 주로 리소스의 중복성이나 충돌을 알리기 위해 사용

@@ -23,7 +23,7 @@ public class TranslationController {
     //Translation (used NAVER-PAPAGO AI)
     @PostMapping("/api/translation")
     public String Translation(@RequestBody TranslationDTO translationDTO){
-        log.info(translationDTO.toString());
+                    log.info(translationDTO.toString());
         return translationService.translateText(translationDTO);
     }
 

@@ -28,8 +28,6 @@ public class MyWord {
     private Content content;
 
     public void setContent(Content content) {
-//        this.content = content;
-//        if(!content.getMyWords().contains(this)) content.getMyWords().add(this);
         if (content != null) {
             this.content = content;
             if (!content.getMyWords().contains(this)) content.getMyWords().add(this);
